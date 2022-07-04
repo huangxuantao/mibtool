@@ -1538,7 +1538,7 @@ smidefault:
 		smiDollar = smiS[smipt-21 : smipt+1]
 //line smi.y:809
 		{
-			smiVAL.node = Node{Label: smiDollar[1].id, Type: NodeObjectType, IDs: smiDollar[20].subidList}
+			smiVAL.node = Node{Label: smiDollar[1].id, Type: NodeObjectType, IDs: smiDollar[20].subidList, Description: smiDollar[12].text}
 		}
 	case 125:
 		smiDollar = smiS[smipt-0 : smipt+1]

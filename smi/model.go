@@ -49,9 +49,10 @@ type Import struct {
 
 // A Node represents a parse node in an SMI document
 type Node struct {
-	Label string
-	Type  NodeType
-	IDs   []SubID
+	Label       string
+	Type        NodeType
+	IDs         []SubID
+	Description string
 }
 
 // A Module contains all of the parse results for a single module file.
@@ -72,6 +73,7 @@ type Module struct {
 type Symbol struct {
 	Name         string
 	ID           int
+	Description  string
 	Module       *Module
 	Parent       *Symbol
 	ChildByLabel map[string]*Symbol

@@ -146,6 +146,7 @@ func (mib *MIB) indexModules() error {
 				sym := &Symbol{
 					Name:         label,
 					ID:           id,
+					Description:  n.Description,
 					Module:       mod,
 					Parent:       parent,
 					ChildByLabel: make(map[string]*Symbol),
