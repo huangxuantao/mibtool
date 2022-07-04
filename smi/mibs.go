@@ -23,6 +23,7 @@ type MIB struct {
 	Modules   map[string]*Module
 	Root      *Symbol
 	Symbols   map[string]*Symbol
+	OIDs      map[string]*Symbol
 	Debug     bool
 	dirs      []string
 	loadOrder []string
@@ -97,13 +98,19 @@ func (mib *MIB) LoadModules(modNames ...string) error {
 }
 
 func (mib *MIB) addSymbol(sym *Symbol) bool {
-	if oldSym, ok := mib.Symbols[sym.Name]; ok {
-		if mib.Debug {
-			log.Printf("imported symbol %v duplicates name of %v, ignoring", sym, oldSym)
-		}
-		return false
-	}
+	//if oldSym, ok := mib.Symbols[sym.Name]; ok {
+	//	if mib.Debug {
+	//		log.Printf("imported symbol %v duplicates name of %v, ignoring", sym, oldSym)
+	//	}
+	//	return false
+	//} // 20220704 不考虑命名重复问题，会导致 mib 解析有误
 	mib.Symbols[sym.Name] = sym
+	oid, err := mib.OID(sym.Name)
+	if mib.Debug && err != nil {
+		log.Printf("generate oid by sym.Name %s, err: %s", sym.Name, err)
+		return true
+	}
+	mib.OIDs[oid.String()] = sym
 	return true
 }
 
