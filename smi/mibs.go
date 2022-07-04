@@ -52,6 +52,7 @@ func NewMIB(dirs ...string) *MIB {
 		dirs:    dirs,
 		Modules: make(map[string]*Module),
 		Symbols: make(map[string]*Symbol),
+		OIDs:    make(map[string]*Symbol),
 	}
 
 	root := Symbol{
