@@ -143,10 +143,20 @@ func (mib *MIB) indexModules() error {
 				} else {
 					label = n.Label
 				}
+				var desc string
+				desc = strings.ReplaceAll(n.Description, "\n", "")
+				var s []string
+				for _, s2 := range strings.Split(desc, " ") {
+					if s2 == "" {
+						continue
+					}
+
+					s = append(s, s2)
+				}
 				sym := &Symbol{
 					Name:         label,
 					ID:           id,
-					Description:  n.Description,
+					Description:  strings.Join(s, " "),
 					Module:       mod,
 					Parent:       parent,
 					ChildByLabel: make(map[string]*Symbol),
@@ -412,6 +422,27 @@ func (mib *MIB) OID(name string) (OID, error) {
 	}
 	oid := mib.symbolOID(sym)
 	return append(oid, idx...), nil
+}
+
+func (mib *MIB) OIDStr(oidStr string) (OID, error) {
+	oidStr = strings.Trim(oidStr, ".")
+	if len(oidStr) >= 2 && oidStr[len(oidStr)-2:] == ".0" {
+		oidStr = oidStr[:len(oidStr)-2]
+	}
+
+	if oidStr == "" {
+		return nil, nil
+	}
+
+	var oid []int
+	for _, s := range strings.Split(oidStr, ".") {
+		i, err := strconv.Atoi(s)
+		if err != nil {
+			return nil, err
+		}
+		oid = append(oid, i)
+	}
+	return oid, nil
 }
 
 func (mib *MIB) symbolOID(sym *Symbol) OID {
